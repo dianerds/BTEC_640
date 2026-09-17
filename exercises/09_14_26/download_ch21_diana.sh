@@ -1,5 +1,15 @@
-##Author: Diana R. Seelinger
+##download_ch21_diana.sh
 
+#Author: Diana R. Seelinger
+#Version: 16 Sept 26
+
+#Description
+    
+#   This file desribes the steps to download the chr21 gtf file from UCSC, filter for protein coding genes, and download the FASTA sequences for the first 10 protein coding genes.
+#   1. Move and make working directory
+#   2. Download, unzip and move to input_data the chr21 gtf file from UCSC
+#   3. Further process this data to obtain the first 10 protein coding genes and get their Fasta sequences
+#   4. Verification by listing fasta files
 
 ##Move and make working directory
 cd #moves to root
