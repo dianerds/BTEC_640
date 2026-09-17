@@ -178,9 +178,9 @@ Type your answer:
 
 Step 1: Copy all lines referencing Chromosome 21 to a new file (chr21.gtf)
 
-Step 2: Number the columns in chr21.gtf
+Step 2: Copy all protein coding genes to a new file (refseq_chr21.gtf)
 
-
+Step 3: Copy all acession numbers to a new file ()
 
 
 
@@ -461,3 +461,67 @@ ls -l *.fasta
 Create a document with all the code that you use today. The descriptio of each step and save it as download_chr21.sh. 
 
 Upload this document to GitHub in a new directory named class_exercises within your btec_640 repository, along with the document containing your answers.
+
+
+    1  echo $0
+    2  pwd
+    3  ls
+    4  cd Doc
+    5  cd Documents/
+    6  ls -l
+    7  mkdir btec_640
+    8  ls
+    9  cd btec_640/
+   10  mkdir exercises
+   11  mkdir genomics
+   12  mkdir transcriptomics
+   13  ls
+   14  cd exercises/
+   15  touch readme
+   16  ls
+   17  nano readme
+   18  ls
+   19  cd Documents/
+   20  cd GitHub/
+   21  cd BTEC_640/
+   22  cd exercises/
+   23  wrdir 09_14_26
+   24  wkdir 09_14_26
+   25  mkdir 09_14_26
+   26  mkdir 09_09_26
+   27  cd 09_14
+   28  cd 09_14_26/
+   29  pwd
+   30  curl -o hg38.ncbiRefSeq.gtf.gz "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/hg38.ncbiRefSeq.gtf.gz"
+   31  gunzip hg38.ncbiRefSeq.gtf.gz
+   32  less hg38.ncbiRefSeq.gtf
+   33  mkdir input_data
+   34  mkdir analysis
+   35  cd analysis/
+   36  ln -s ../input_data/hg38.ncbiRefSeq.gtf
+   37  grep "chr21" hg38.ncbiRefSeq.gtf > chr21.gtf
+   38  grep -c "chr21" hg38.ncbiRefSeq.gtf
+   39  wc -l hg38.ncbiRefSeq.gtf
+   40  wc -l chr21.gtf
+   41  grep "NM_" chr21.gtf > refseq_chr21.gtf
+   42  wc -l refseq_chr21.gtf
+   43  awk -F 't' '{print $9}' refseq_chr21.gtf  head -n 1
+   44  cd Documents/
+   45  cd GitHub/
+   46  cd BTEC_640/
+   47  pwd
+   48  ls
+   49  cd exercises/
+   50  cd 09_14_26/
+   51  cd ana
+   52  cd analysis/
+   53  awk -F '\t' '{print $9}' refseq_chr21.gtf | head
+   54  awk -F '\t' '{print $9}' refseq_chr21.gtf | awk -F
+   55  awk -F '\t' '{print $9}' refseq_chr21.gtf  | awk -F'"' '!seen[$2]++ {print $2, $4}' refseq_chr21.gtf > gene_accession.txt
+   56  wc -l gene_accession.text
+   57  wc -l gene_accession.txt
+   58  head -n 10 gene_accession.txt > 10_genes.txt
+   59  cat 10_genes.txt
+   60  while read -r gene accession; do curl -o "${gene}.fasta" "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=${accession}&rettype=fasta&retmode=text"; done < 10_genes.txt
+   61  ls -l *.fasta
+   62  history
