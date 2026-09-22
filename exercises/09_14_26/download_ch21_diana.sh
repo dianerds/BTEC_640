@@ -14,8 +14,8 @@
 ##Move and make working directory
 cd #moves to root
 cd Documents/ #moves into to Documents
-mkdir btec_640 #makes folder btec_640
-cd btec_640/ #moves into folder btec_640
+mkdir btec_640_TEST #makes folder btec_640
+cd btec_640_TEST/ #moves into folder btec_640
 mkdir exercises #makes folder exercises
 cd exercises/ #moves into folder exercises
 mkdir 09_14_26 #makes folder 09_14_26
