@@ -1,0 +1,2 @@
+NC_000913.3	RefSeq	gene	3639385	3639720	.	-	.	ID=gene-b3494;Dbxref=ECOCYC:EG12231,GeneID:948008;Name=uspB;gbkey=Gene;gene=uspB;gene_biotype=protein_coding;gene_synonym=ECK3479,yhiO;locus_tag=b3494
+NC_000913.3	RefSeq	CDS	3639385	3639720	.	-	0	ID=cds-NP_417951.1;Parent=gene-b3494;Dbxref=UniProtKB/Swiss-Prot:P0A8S5,GenBank:NP_417951.1,ECOCYC:EG12231,GeneID:948008;Name=NP_417951.1;gbkey=CDS;gene=uspB;locus_tag=b3494;product=universal stress protein B;protein_id=NP_417951.1;transl_table=11

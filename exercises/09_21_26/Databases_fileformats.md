@@ -349,79 +349,91 @@ Using `grep`, print the headers and save them in a new file name `ecoli_genome_h
 
 Paste your commands here
 
-
-
-
-
-```
-
-#### FASTQ
-
-For this section we will use a data from (The Carpentries Genomics project)[https://datascience.si.edu/carpentries] which has workshops and files to practice bioinformatics.
-
-Download the fastq data from *E. coli* inside your `input_data` directory
-
-```bash
-curl -L -o shell_data.tar.gz "https://ndownloader.figshare.com/files/14417834"
-tar -xzf shell_data.tar.gz
-```
-
-Go to this directory: `shell_data/untrimmed_fastq/`
-
->:question: Open `SRR097977.fastq` file with `less` and explain what's the same between the fasta files you opened before?
-
-```
-Type your answer
-
+grep ">" ecoli_protein.faa > ecoli_protein_headers.txt
 
 
 
 ```
-
-Based on [this information]((https://casrai.org/guides/fastq-format-explained)), print the first 4 lines of `SRR097977.fastq`, describee what each line represents:
-
-
-```
-Type you answer here:
-(Copy the beginning of each line an explain what information provides)
-
-
-
-
-
-
-```
-
-Count reads in a FASTQ. Since each read is **exactly 4 lines**, total line count divided by 4 gives the number of reads:
-
-```bash
-wc -l SRR097977.fastq
-
-
-#Type your answer here: (number of sequences)
-
-
-
-
-
-```
-
 
 ### GFF and GTF
-
-Print the first 5 lines of each document and explain what information is shared between them, what is different (write column number)
-
+Two common file formats used in genomic data representation are Gene Transfer
+Format (GTF) and General Feature Format (GFF). Both are a text file, that can be
+read as a table.
+#### :pencil: **Excercise 3**
+Let's analyze and compare the annotation for **b3494** gene in *E. coli*. Both, GFF
+and GTF files have information abouth this gene.
+With `grep` print and save in a new file the annotation for **b3494** gene for each
+file. You should generate two files, named them as `b3494.gff` and `b3494.gtf`
+respectively, and answer the following:
 ```
-Type your answer here:
+1. Paste the commands that you used to print and generate the files:
+
+2. Which are the b3494 gene coordinates in our E. coli genome? locate this information in both files and write down your findings:
+
+b3494.gff file:
+
+b3494.gtf file:
 
 
+3. How many exons does this gene have? And describe where did you find this
+information.
+
+b3494.gff file:
+
+b3494.gtf file:
 
 
+4. What is the Uniprot ID for this protein?
+
+b3494.gff file: UniProtKB/Swiss-Prot:P0A8S5
+
+b3494.gtf file: UniProtKB/Swiss-Prot:P0A8S5
 
 
-
-
+5. Go to the Uniprot website (https://www.uniprot.org/) using the Uniprot ID that
+you found, look for the name and function of this protein:
 ```
-## To get credit: 
+#### FASTQ
+For this section we will use a data from [The Carpentries Genomics project]
+(https://datascience.si.edu/carpentries) which has workshops and files to practice
+bioinformatics.
+Download the fastq data from *E. coli* inside your `input_data` directory
+```bash
+curl -L -o shell_data.tar.gz "https://ndownloader.figshare.com/files/14417834"
+```
+:bulb: Notice that this file has a new extension type: `tar.gz`. This is a
+combination of a **TAR** and **GZIP**.
+**TAR**: Combines multiple files and directories into one single file (a "tarball")
+while keeping file permissions and folder structures intact, but it does not reduce
+the size. <br>
+**GZ**: Compresses the combined tar file to reduce its total size. GZ cannot
+compress an entire folder by itself, this is why TAR package the directories and
+files into a single file.
+>[!TIP]
+**Syntax: `tar` -[flags] <file.tar.gz>**
+><br>
+>Flags: <br>
+> -**c**: Creates a new archive <br>
+> -**x**: Extract files from an archive <br>
+> -**v**: Displays the archiving process <br>
+> -**z**: Applies gzip compression<br>
+> -**f**: Specifies the name of the archive file<br>
+Extract the files with `tar`
+```bash
+tar -xzvf <filename>
+```
+Take a look of the structure of the new directory that you have on your terminal.
+Go inside `shell_data` and do `ls` to see what is inside.
+Go to this directory: `shell_data/untrimmed_fastq/`
+:question: Open `SRR097977.fastq` file with `less` and explain what's similar and
+what's different between the fasta files you opened before?
+```
+Type your answer
+```
+Based on [this information](https://casrai.org/guides/fastq-format-explained),
+print the first 4 lines of `SRR097977.fastq`, describee what each line represents:
 
-Upload your answers in PDF format to canvas under E_coli_excercise
+@SRR097977.1 209DTAAXX_Lenski2_1_7:8:3:710:178 length=36 #marks coordinates
+TATTCTGCCATAATGAAATTCGCCACTTGTTAGTGT #raw sequence
++SRR097977.1 209DTAAXX_Lenski2_1_7:8:3:710:178 length=36 #marks coordinates
+CCCCCCCCCCCCCCC>CCCCC7CCCCCCACA?5A5< #gives quality report on the sequence
