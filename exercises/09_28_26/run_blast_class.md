@@ -183,7 +183,7 @@ makeblastdb –in $WORKDIR/$INPUTDIR/chr21.fa –dbtype nucl -out $WORKDIR/$ANAL
 ```
 Paste here the filenames followed by a brief explanation of what did you observe
 
-
+blast_result.txt
 
 
 
