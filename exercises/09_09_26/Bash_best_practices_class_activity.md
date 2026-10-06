@@ -208,7 +208,7 @@ mkdir -p btec_640/class_excercises
 > :pencil:copy and paste here the command that you use, **Don't forget to use all the best practices for documentation that we saw in class**
 > ```
 >
->
+>mkdir (main directory)/(subdirectory)
 >
 >
 >
