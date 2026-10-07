@@ -120,7 +120,7 @@ curl -o frog.gtf.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/004/195/GC
 
 curl -o zebrafish.gtf.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/049/306/965/GCF_049306965.1_GRCz12tu/GCF_049306965.1_GRCz12tu_genomic.gtf.gz"
 ```
-
+ 
 :question: Before continuing, do a sanity check: list the files with their sizes (`ls -lh`). Each file should be between ~15 and ~40 MB. What would it mean if one of them was only a few KB?
 
 ```
@@ -448,18 +448,22 @@ tlr9 frog XP_XXXXXXXXX.X
 ```bash
 #Paste the commands you used:
 
-cat tp53_*.gtf > tp53_all.gtf
-cat aim2_*.gtf > aim2_all.gtf
-cat tlr9_*.gtf > tlr9_all.gtf
-cat tlr21_*.gtf > tlr21_all.gtf
-cat gulo_*.gtf > gulo_all.gtf
-cat tp53_all.gtf aim2_all.gtf tlr9_all.gtf tlr21_all.gtf gulo_all.gtf > interest_all.gtf
+for SPECIES in mouse chicken frog zebrafish
+do
+    for GENE in tp53 aim2 tlr9 tlr21 gulo
+    do
+        FILE="${GENE}_${SPECIES}.gtf"
 
-grep -o 'protein_id "NP_[^"]*"' interest_all.gtf | sort -u > NP_all.gtf
-grep -o 'protein_id "XP_[^"]*"' interest_all.gtf | sort -u > XP_all.gtf
-cat XP_all.gtf NP_all.gtf > protein_all.gtf
+        PROTEIN=$(grep -o 'protein_id "[NX]P_[^"]*"' "$FILE" |
+                  grep -o '[NX]P_[^"]*' |
+                  sort -u)
 
-awk
+        if [ -n "$PROTEIN" ]
+        then
+            echo "$GENE $SPECIES $PROTEIN" >> protein_list.txt
+        fi
+    done
+done
 
 
 
@@ -470,6 +474,8 @@ awk
 :warning: In chromosome 21 excercise, we downloaded nucleotide sequences with `db=nuccore`, WE NEED TO CHANGE THE URL BECAUSE WE ARE LOOKING FOR PROTEINS NO NUCLEOTIDES:
 
 ```bash
+cd ~/Documents/btec-640_TEST/assignment_2/analysis/proteins
+
 while read -r gene species accession
 do
     curl -o "${gene}_${species}.faa" "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=protein&id=${accession}&rettype=fasta&retmode=text"
@@ -480,7 +486,11 @@ done < ../gene_survey/protein_list.txt
 
 ```bash
 #Paste your command loop here:
-
+while read -r gene species accession
+do
+    curl -o "${gene}_${species}.faa" "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=protein&id=${accession}&rettype=fasta&retmode=text"
+    sleep 1
+done < ../gene_survey/protein_list.txt
 
 
 
@@ -491,7 +501,11 @@ done < ../gene_survey/protein_list.txt
 Example:
 
  ```bash
- cat tlr9_*.faa > tlr9_all.faa
+cat tp53_*.faa > tp53_all.faa
+cat aim2_*.faa > aim2_all.faa
+cat tlr9_*.faa > tlr9_all.faa
+cat tlr21_*.faa > tlr21_all.faa
+cat gulo_*.faa > gulo_all.faa
  ```
  Explain what does this command do and run it for every gene.
 
@@ -518,7 +532,7 @@ We want to know if a gene exists in a **genome**, even if nobody annotated it.
 ```
 Type your answer:
 
-
+To search from a fasta (residue) sequence in genomic DNA, including for unannotated genes, use tblastn
 
 
 ```
@@ -528,7 +542,7 @@ Type your answer:
 ```
 Type your answer:
 
-
+The functional protein identity is more conserved than the nucleotide identity, where multiple codons may code for the same residue and thus there is room for error
 
 ```
 
