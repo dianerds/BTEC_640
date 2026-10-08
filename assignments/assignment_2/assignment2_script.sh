@@ -27,12 +27,15 @@
 #5. Save in an output file
 #6. Check the data
 
-mkdir -p ~/Documents/btec-640_TEST/assignment_2/input_data ~/Documents/btec-640_TEST/assignment_2/final_output ~/Documents/btec-640_TEST/assignment_2/src ~/Documents/btec-640_TEST/assignment_2/analysis/gene_survey ~/Documents/btec-640_TEST/assignment_2/analysis/blast ~/Documents/btec-640_TEST/assignment_2/analysis/proteins
+#VARIABLES
+WORKDIR=~/Documents/btec-640_TEST/assignment_2
 
-cd ~/Documents/btec-640_TEST
+mkdir -p $WORKDIR/input_data $WORKDIR/final_output $WORKDIR/src $WORKDIR/analysis/gene_survey $WORKDIR/analysis/blast $WORKDIR/analysis/proteins
+
+cd $WORKDIR
 touch README
 echo "this is assignment 2 for btec 640" > README
-cd ~/Documents/btec-640_TEST/input_data
+cd $WORKDIR/input_data
 
 curl -o mouse.gtf.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_genomic.gtf.gz"
 
@@ -48,11 +51,11 @@ for f in *.gz; do
     gunzip "$f"
 done
 
-cd ~/Documents/btec-640_TEST/assignment_2/analysis/gene_survey
-ln -s ~/Documents/btec-640_TEST/assignment_2/input_data/chicken.gtf
-ln -s ~/Documents/btec-640_TEST/assignment_2/input_data/frog.gtf
-ln -s ~/Documents/btec-640_TEST/assignment_2/input_data/mouse.gtf
-ln -s ~/Documents/btec-640_TEST/assignment_2/input_data/zebrafish.gtf
+cd $WORKDIR/analysis/gene_survey
+ln -s $WORKDIR/input_data/chicken.gtf
+ln -s $WORKDIR/input_data/frog.gtf
+ln -s $WORKDIR/input_data/mouse.gtf
+ln -s $WORKDIR/input_data/zebrafish.gtf
 
 awk -F'\t' '$3=="gene"' mouse.gtf > mouse_genes.gtf
 awk -F'\t' '$3=="gene"' zebrafish.gtf > zebrafish_genes.gtf
@@ -97,7 +100,7 @@ do
 done
 
 
-cd ~/Documents/btec-640_TEST/assignment_2/analysis/proteins
+cd $WORKDIR/analysis/proteins
 
 while read -r gene species accession
 do
@@ -123,13 +126,17 @@ for f in *.gz; do
     gunzip "$f"
 done
 
-makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/mouse.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/mouse_db
-makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/frog.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/frog_db
-makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/zebrafish.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/zebrafish_db
-makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken_db
+makeblastdb -in $WORKDIR/analysis/proteins/mouse.fna -dbtype nucl -out $WORKDIR/analysis/proteins/mouse_db
+makeblastdb -in $WORKDIR/analysis/proteins/frog.fna -dbtype nucl -out $WORKDIR/analysis/proteins/frog_db
+makeblastdb -in $WORKDIR/analysis/proteins/zebrafish.fna -dbtype nucl -out $WORKDIR/analysis/proteins/zebrafish_db
+makeblastdb -in $WORKDIR/analysis/proteins/chicken.fna -dbtype nucl -out $WORKDIR/analysis/proteins/chicken_db
 
-while read -r gene species accession
+for SPECIES in mouse chicken frog zebrafish
 do
-   tblastn -db ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken_db -query ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/${gene}_${species}.fasta -out ~/Documents/btec-640_TEST/assignment_2/final_output/${gene}_${species}_output.tsv -outfmt 6  
- done < ../gene_survey/protein_list.txt
+    for GENE in tp53 aim2 tlr9 tlr21 gulo
+    do
+        tblastn -db $WORKDIR/analysis/proteins/${SPECIES}_db -query $WORKDIR/analysis/proteins/${GENE}_all.faa -out $WORKDIR/final_output/${GENE}_${SPECIES}_output.tsv -outfmt 6  
+    done
+done > blast_comparisons.txt
+
 
