@@ -111,10 +111,25 @@ cat tlr9_*.faa > tlr9_all.faa
 cat tlr21_*.faa > tlr21_all.faa
 cat gulo_*.faa > gulo_all.faa
 
-makeblastdb -in  -dbtype nucl -out $WORKDIR/$ANALYSISDIR/output_database
+curl -o mouse.fna.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_genomic.fna.gz"
 
-while read -r GENE ID
+curl -o chicken.fna.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/016/699/485/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna.gz"
+
+curl -o frog.fna.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/004/195/GCF_000004195.4_UCB_Xtro_10.0/GCF_000004195.4_UCB_Xtro_10.0_genomic.fna.gz"
+
+curl -o zebrafish.fna.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/049/306/965/GCF_049306965.1_GRCz12tu/GCF_049306965.1_GRCz12tu_genomic.fna.gz"
+
+for f in *.gz; do
+    gunzip "$f"
+done
+
+makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/mouse.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/mouse_db
+makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/frog.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/frog_db
+makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/zebrafish.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/zebrafish_db
+makeblastdb -in ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken.fna -dbtype nucl -out ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken_db
+
+while read -r gene species accession
 do
-   tblastn -db $WORKDIR/$ANALYSISDIR/output_database -query $WORKDIR/$INPUTDIR/${GENE}.fasta -out $WORKDIR/$OUTDIR/${GENE}_blast_output.tsv -outfmt 6  
- done < $WORKDIR/$INPUTDIR/10_genes.txt
+   tblastn -db ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/chicken_db -query ~/Documents/btec-640_TEST/assignment_2/analysis/proteins/${gene}_${species}.fasta -out ~/Documents/btec-640_TEST/assignment_2/final_output/${gene}_${species}_output.tsv -outfmt 6  
+ done < ../gene_survey/protein_list.txt
 

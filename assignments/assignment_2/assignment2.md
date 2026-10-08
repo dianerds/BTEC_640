@@ -600,16 +600,51 @@ You have now done every step of this analysis by hand. Without writing any code,
 
 ```
 Step 1:
-    Input:
-    Output:
-    Tool/command:
+    Input: Link
+    Output: Annotated genomes.gtf.gz
+    Tool/command: Curl
 
 Step 2:
-    Input:
-    Output:
-    Tool/command:
+    Input: Annotated genomes.gz
+    Output: Annotated genomes.gtf
+    Tool/command: Gunzip
 
-(continue...)
+Step 3:
+    Input: Annotated genomes.gtf
+    Output: Genes.gtf
+    Tool/command: Awk 
+
+Step 4:
+    Input: Genes.gtf
+    Output: Individual genes of interest gtf files from each species
+    Tool/command: Grep
+
+Step 5: 
+    Input: Individual genes of interest gtf files from each species
+    Output: List of proteins
+    Tool/command: Grep 
+
+Step 6: 
+    Input: List of proteins of interest
+    Output: Protein sequences
+    Tool/command: Curl 
+
+Step 7: 
+    Input: Link
+    Output: Genome nucleotide sequences
+    Tool/command: Curl 
+
+Step 8: 
+    Input: Genome nucleotides sequence
+    Output: Blast database
+    Tool/command: Makeblastdb
+
+Step 9: 
+    Input: Blast database, protein sequence
+    Output: Similarity comparison
+    Tool/command: tblastn
+
+
 
 
 
