@@ -10,11 +10,9 @@
 #
 #Description:
 #
-# This is a program which 
+# This is a program which is used to detect orthologs of tp53, aim2, tlr9, 21 and gulo in mice, zebrafish, frog and chicken model genomes from NCBI database data
 #
-#Usage:
-#
-#
+
 
 
 #------Edit-----------
@@ -132,6 +130,8 @@ cat gulo_*.faa > gulo_all.faa
 
 #Step #5: Make blast databases from genomes
 
+cd $WORKDIR/analysis/blast/ #move to part 3 of our analysis dir 
+
 #Download raw unannotated nucleotide genomes (gunzipped) from NCBI
 curl -o mouse.fna.gz "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/635/GCF_000001635.27_GRCm39/GCF_000001635.27_GRCm39_genomic.fna.gz"
 
@@ -147,17 +147,17 @@ for f in *.gz; do
 done
 
 #Make a BLAST database out of each nucleotide genome
-makeblastdb -in $WORKDIR/analysis/proteins/mouse.fna -dbtype nucl -out $WORKDIR/analysis/proteins/mouse_db
-makeblastdb -in $WORKDIR/analysis/proteins/frog.fna -dbtype nucl -out $WORKDIR/analysis/proteins/frog_db
-makeblastdb -in $WORKDIR/analysis/proteins/zebrafish.fna -dbtype nucl -out $WORKDIR/analysis/proteins/zebrafish_db
-makeblastdb -in $WORKDIR/analysis/proteins/chicken.fna -dbtype nucl -out $WORKDIR/analysis/proteins/chicken_db
+makeblastdb -in $WORKDIR/analysis/blast/mouse.fna -dbtype nucl -out $WORKDIR/analysis/blast/mouse_db
+makeblastdb -in $WORKDIR/analysis/blast/frog.fna -dbtype nucl -out $WORKDIR/analysis/blast/frog_db
+makeblastdb -in $WORKDIR/analysis/blast/zebrafish.fna -dbtype nucl -out $WORKDIR/analysis/blast/zebrafish_db
+makeblastdb -in $WORKDIR/analysis/blast/chicken.fna -dbtype nucl -out $WORKDIR/analysis/blast/chicken_db
 
 #6. Run protein sequences via tblastn against blast databases
 for SPECIES in mouse chicken frog zebrafish
 do
     for GENE in tp53 aim2 tlr9 tlr21 gulo
     do
-        tblastn -db $WORKDIR/analysis/proteins/${SPECIES}_db -query $WORKDIR/analysis/proteins/${GENE}_all.faa -out $WORKDIR/final_output/${GENE}_${SPECIES}_output.tsv -outfmt 6  
+        tblastn -db $WORKDIR/analysis/blast/${SPECIES}_db -query $WORKDIR/analysis/proteins/${GENE}_all.faa -out $WORKDIR/final_output/${GENE}_${SPECIES}_output.tsv -outfmt 6  
         sleep 1
     done
 done > blast_comparisons.txt #runs a blast search against each newly minted animal genome database for each gene of interest's combined sequences to detect similar sequences regardless of annotation

@@ -408,8 +408,8 @@ Open `gene_survey.txt` and copy the results into the table:
 |---|---|---|---|---|
 | TP53 | False | True | True | True |
 | AIM2 | True | False | False | False |
-| TLR9 | True | False | False | True |
-| TLR21 | False | True | True | True |
+| TLR21 | True | False | False | True |
+| TLR9 | False | True | True | True |
 | GULO | True | False | False | False |
 
 
@@ -455,7 +455,6 @@ do
         FILE="${GENE}_${SPECIES}.gtf"
 
         PROTEIN=$(grep -o 'protein_id "[NX]P_[^"]*"' "$FILE" |
-                  grep -o '[NX]P_[^"]*' |
                   sort -u)
 
         if [ -n "$PROTEIN" ]
@@ -557,16 +556,16 @@ Run one search for every `NOT_FOUND` in your survey table (Exercise 7). As query
 
 | # | Gene | Query (protein file) | Search in… | % Identity | Query cover | E-value | Present or Absent? |
 |---|---|---|---|---|---|---|---|
-| 1 | TP53 | `tp53_chicken.faa` | mouse | | | | |
-| 2 | AIM2 | `aim2_mouse.faa` | chicken | | | | |
-| 3 | AIM2 | `aim2_mouse.faa` | frog | | | | |
-| 4 | AIM2 | `aim2_mouse.faa` | zebrafish | | | | |
-| 5 | TLR9 | `tlr9_mouse.faa` | chicken | | | | |
-| 6 | TLR21 | `tlr21_chicken.faa` | mouse | | | | |
-| 7 | TLR21 | `tlr21_chicken.faa` | frog | | | | |
-| 8 | GULO | `gulo_mouse.faa` | chicken | | | | |
-| 9 | GULO | `gulo_mouse.faa` | frog | | | | |
-| 10 | GULO | `gulo_mouse.faa` | zebrafish | | | | |
+| 1 | TP53 | `tp53_chicken.faa` | mouse | 69% | 56% | 4e-67 | P |
+| 2 | AIM2 | `aim2_mouse.faa` | chicken | N/A | N/A | N/A | A |
+| 3 | AIM2 | `aim2_mouse.faa` | frog | N/A | N/A | N/A | A |
+| 4 | AIM2 | `aim2_mouse.faa` | zebrafish  | N/A | N/A | N/A | A |
+| 5 | TLR9 | `tlr9_mouse.faa` | chicken | 34% | 94% | 1e-172 | P |
+| 6 | TLR21 | `tlr21_chicken.faa` | mouse | 29% | 93% | 1e-97 | P |
+| 7 | TLR21 | `tlr21_chicken.faa` | frog | 42% | 94% | 0.0 | P |
+| 8 | GULO | `gulo_mouse.faa` | chicken | 55% | 96% | 7e-22 | P |
+| 9 | GULO | `gulo_mouse.faa` | frog | 62% | 92% | 8e-16 | P |
+| 10 | GULO | `gulo_mouse.faa` | zebrafish | zebrafish  | N/A | N/A | N/A | A |
 
 >[!IMPORTANT]
 > **A hit is not the same as the gene.** Proteins belong to families that share domains, so a TLR9 query will also find *other* Toll-like receptors. A real gene gives a hit that covers **most of the protein** (high query cover) with a **very small E-value**. A hit that covers only a small piece of the protein is usually just a shared domain from a different gene. Use search #1 (TP53) as your example of what a real hit looks like.
@@ -575,22 +574,44 @@ Run one search for every `NOT_FOUND` in your survey table (Exercise 7). As query
 
 | Gene | mouse | chicken | frog | zebrafish |
 |---|---|---|---|---|
-| TP53 | | | | |
-| AIM2 | | | | |
-| TLR9 | | | | |
-| TLR21 | | | | |
-| GULO | | | | |
+| TP53 | P | P | P | P |
+| AIM2 | P | A | A | A |
+| TLR9 | P | P | P | P |
+| TLR21 | P | P | P | P |
+| GULO | P | P | P | A |
 
 :question: Compare this table with your grep survey (Exercise 7). How many conclusions would have been **wrong** if you had stopped at the annotation file?
 
 ```
 Type your answer:
 
+grep survey below and blast results below it
 
+The ubiquity of TLR21, TLR9 and TP53 would have been disguised, which could have led to incorrect assumptions, given the conserved function of these genes in innate immunity (TLR) and tumor suppression (TP53), about lternative mechanisms these organisms might possess when they do in fact rely on this conserved machinery
 
 
 ```
+| Gene | mouse | chicken | frog | zebrafish |
+|---|---|---|---|---|
+| TP53 | False | True | True | True |
+| AIM2 | True | False | False | False |
+| TLR21 | True | False | False | True |
+| TLR9 | False | True | True | True |
+| GULO | True | False | False | False |
 
+
+| # | Gene | Query (protein file) | Search in… | % Identity | Query cover | E-value | Present or Absent? |
+|---|---|---|---|---|---|---|---|
+| 1 | TP53 | `tp53_chicken.faa` | mouse | 69% | 56% | 4e-67 | P |
+| 2 | AIM2 | `aim2_mouse.faa` | chicken | N/A | N/A | N/A | A |
+| 3 | AIM2 | `aim2_mouse.faa` | frog | N/A | N/A | N/A | A |
+| 4 | AIM2 | `aim2_mouse.faa` | zebrafish  | N/A | N/A | N/A | A |
+| 5 | TLR9 | `tlr9_mouse.faa` | chicken | 34% | 94% | 1e-172 | P |
+| 6 | TLR21 | `tlr21_chicken.faa` | mouse | 29% | 93% | 1e-97 | P |
+| 7 | TLR21 | `tlr21_chicken.faa` | frog | 42% | 94% | 0.0 | P |
+| 8 | GULO | `gulo_mouse.faa` | chicken | 55% | 96% | 7e-22 | P |
+| 9 | GULO | `gulo_mouse.faa` | frog | 62% | 92% | 8e-16 | P |
+| 10 | GULO | `gulo_mouse.faa` | zebrafish | zebrafish  | N/A | N/A | N/A | A |
 
 ---
 
